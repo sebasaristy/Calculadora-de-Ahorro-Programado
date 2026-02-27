@@ -5,7 +5,7 @@ from pathlib import Path
 # Permite importar desde la carpeta raíz del proyecto
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from logica import AhorroProgramado
+from src.core.logica import AhorroProgramado
 
 class TestAhorroProgramado(unittest.TestCase):
 
