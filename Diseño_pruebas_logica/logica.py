@@ -1,5 +1,3 @@
-# Archivo: core/ahorro.py
-<<<<<<< HEAD
 from dataclasses import dataclass, field
 
 class ErrorMetaMayorACero(Exception):
@@ -30,16 +28,12 @@ class ErrorAbonoExtraMenorAcero(Exception):
        # Se usa cuando el abono extra es menor que 0
     pass
 
-=======
-
->>>>>>> 5a5ad119a202a8051f5414e828adae2926bfed29
 class AhorroProgramado:
     def __init__(self, meta, plazo, extra=0, mes_extra=0):
         self.meta = meta
         self.plazo = plazo
         self.extra = extra
         self.mes_extra = mes_extra
-<<<<<<< HEAD
 
     def calcular_ahorro(self):
         # 1. Validaciones (Estas lanzan el ValueError que esperan los tests)
@@ -69,8 +63,6 @@ class AhorroProgramado:
         return round(cuota, 2)
     
 
-=======
-
     def calcular_ahorro(self):
         # 1. Validaciones (Estas lanzan el ValueError que esperan los tests)
         if self.meta <= 0:
@@ -90,4 +82,3 @@ class AhorroProgramado:
             
         cuota = meta_restante / self.plazo
         return round(cuota, 2)
->>>>>>> 5a5ad119a202a8051f5414e828adae2926bfed29
