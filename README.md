@@ -1,7 +1,7 @@
 # 💻 Simulador de Ahorro Programado
 
 # grupo comformado por jose angel sanchez y miguel angel salazar
-Herramienta financiera construida para la asignatura **lenguajes de programacion y codigo limpio**. Este sistema está diseñado aplicando **Clean Code**, manejo preventivo de errores y un entorno riguroso de pruebas unitarias automatizadas.
+Herramienta financiera construida para la asignatura **lenguajes de programacion y codigo limpio**. Este sistema está diseñado aplicando **pruebas unitarias y una pequeña logica con retorno en la consola**, manejo preventivo de errores y un entorno riguroso de pruebas unitarias automatizadas.
 
 Su función principal es calcular la cuota mensual requerida para cumplir un objetivo de ahorro en un tiempo definido, tomando en cuenta el rendimiento de una tasa de interés mensual y el impacto de inyecciones de capital (abonos extra) en fechas específicas.
 
