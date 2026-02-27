@@ -1,87 +1,94 @@
-# 📈 Calculadora de Ahorro Programado
+# 💻 Simulador de Ahorro Programado
 
-Proyecto académico desarrollado bajo principios de código limpio, validaciones robustas, manejo de excepciones y pruebas unitarias para la asignatura lenguajes de programacion y codigo limpio, equipo comformado por miguel angel salazar orrego, jose angel sanchez martinez
+# grupo comformado por jose angel sanchez y miguel angel salazar
+Herramienta financiera construida para la asignatura **lenguajes de programacion y codigo limpio**. Este sistema está diseñado aplicando **Clean Code**, manejo preventivo de errores y un entorno riguroso de pruebas unitarias automatizadas.
 
-Esta aplicación calcula cuánto se debe ahorrar mensualmente para alcanzar una meta financiera en un plazo determinado, considerando una tasa de interés mensual fija y el impacto de un abono extra en un mes específico.
-
----
-
-## 🎯 Objetivo
-
-Calcular la **cuota mensual de ahorro necesaria** para alcanzar una meta financiera utilizando el modelo de **valor futuro de una anualidad con interés compuesto**, incluyendo la posibilidad de un aporte extraordinario que reduce la carga mensual.
+Su función principal es calcular la cuota mensual requerida para cumplir un objetivo de ahorro en un tiempo definido, tomando en cuenta el rendimiento de una tasa de interés mensual y el impacto de inyecciones de capital (abonos extra) en fechas específicas.
 
 ---
 
-## 🧮 Fundamento Matemático
+## 🚀 Propósito del Proyecto
 
-La aplicación utiliza matemática financiera para proyectar el crecimiento del dinero:
-
-- 📌 **Tasa de interés mensual fija:** (Ej. `0.75%` o la parametrizada en el código).
-- 📌 **Valor futuro del abono extra:** Si existe un abono en el mes `k`, este genera intereses hasta el final del plazo `n`.
-  
-  
-
-- 📌 **Fórmula de valor futuro de anualidad ordinaria:** Para calcular cómo las cuotas mensuales construyen el capital restante.
-  
-  
-
-- 📌 **Despeje de la Cuota Mensual:** Se resta el valor futuro del abono a la meta original, y sobre esa diferencia se calcula la cuota final requerida.
-  
-  
-
-El resultado final se redondea a **2 decimales** para su representación en moneda.
+El objetivo central es automatizar el cálculo de la **cuota mensual fija** que un usuario debe depositar para alcanzar una meta económica. Para esto, el algoritmo se apoya en el modelo matemático de **anualidades de valor futuro con interés compuesto**, evaluando cómo un aporte extraordinario disminuye la carga mensual del ahorrador.
 
 ---
 
-## 📥 Entradas del Sistema
+## 📊 Bases Matemáticas y Fórmulas
 
-El programa trabaja con los siguientes datos ingresados por el usuario o enviados al constructor de la clase:
+El motor de cálculo financiero del programa se rige por las siguientes premisas:
 
-| Entrada | Tipo | Descripción |
+- 📌 **Tasa de rendimiento mensual:** Fijada en `0.75%` (0.0075) para las proyecciones.
+- 📌 **Proyección del capital extra:** Todo abono extraordinario genera rendimientos desde el mes en que se deposita (`k`) hasta el vencimiento del plan.
+
+\[
+![Fórmula Valor Futuro](assets/images//fvextra.svg)
+\]
+
+- 📌 **Crecimiento de las cuotas (Anualidad):** Calcula cómo el dinero aportado mes a mes va sumando valor con los intereses.
+
+\[
+![Fórmula Valor Futuro](assets/images//formula2.svg)
+\]
+
+- 📌 **Cálculo de la cuota final:** Al total de la meta se le descuenta el valor futuro generado por el abono extra. La diferencia restante se divide por el factor de anualidad para hallar el pago mensual exacto.
+
+\[
+![Fórmula Valor Futuro](assets/images//cuotamensual.svg)
+\]
+
+Todos los valores monetarios de salida se redondean a **2 decimales** para garantizar precisión contable.
+
+---
+
+## 📥 Parámetros de Entrada
+
+Para operar, la herramienta requiere que se definan cuatro variables clave (ya sea por consola o mediante la instanciación de la clase):
+
+| Variable | Tipo de Dato | Definición |
 |----------|--------|--------------|
-| `meta` | `float` | Monto total que se desea alcanzar al final del periodo. |
-| `plazo` | `int` | Número total de meses para alcanzar la meta. |
-| `extra` | `float` | Abono adicional realizado en un mes específico (0 si no aplica). |
-| `mes_extra` | `int` | Mes exacto en el que se realiza el abono extra. |
+| `meta` | `float` | Capital final que el usuario desea acumular. |
+| `plazo` | `int` | Cantidad total de meses contemplados para el ahorro. |
+| `extra` | `float` | Inyección de capital adicional (indicar `0` si no se hará ningún abono extra). |
+| `mes_extra` | `int` | Mes exacto durante el cual se efectuará el depósito adicional. |
 
 ---
 
-## 🔎 Validaciones Implementadas
+## 🛡️ Reglas de Negocio y Validaciones
 
-El sistema está blindado contra datos irreales. Se valida estrictamente que:
+Para asegurar la integridad matemática del sistema, se configuraron restricciones estrictas. El programa evalúa que:
 
-- La meta sea mayor que 0.
-- El plazo sea mayor que 0.
-- El abono extra no sea negativo.
-- El abono extra no supere la meta total de ahorro.
-- El mes del abono esté dentro del rango lógico (entre 1 y el plazo total).
+- El capital a ahorrar (meta) sea estrictamente positivo.
+- El horizonte de tiempo (plazo) sea mayor a cero meses.
+- El monto del aporte extra nunca sea un número negativo.
+- La inyección extra de capital no sea mayor que la meta misma.
+- La fecha del abono (mes extra) ocurra dentro de la vigencia del plan de ahorro.
 
-Si alguna condición falla, el sistema lanza **excepciones personalizadas** (`ValueError`) para detener la ejecución y alertar al usuario.
-
----
-
-## ⚙️ Proceso de Ejecución
-
-1. El usuario (o el script de pruebas) ingresa los parámetros solicitados.
-2. Se ejecutan las validaciones de integridad de datos.
-3. Se calcula el valor futuro del abono extra (si existe) basado en el tiempo que permanecerá ganando intereses.
-4. Se calcula el factor de anualidad para el plazo establecido.
-5. Se despeja la cuota mensual sobre la meta restante.
-6. Se retorna el resultado monetario o se captura el mensaje de error correspondiente.
+El incumplimiento de cualquiera de estas reglas interrumpe el proceso y dispara **excepciones personalizadas**.
 
 ---
 
-## 📤 Salida del Sistema
+## 🔄 Flujo de Ejecución
 
-### ✅ Caso Exitoso
-Cuando los datos son válidos, el cálculo es directo y preciso:
+1. Recepción de los parámetros de configuración del ahorro.
+2. Filtro de seguridad (evaluación de las reglas de negocio).
+3. Determinación de los intereses ganados por el abono extraordinario.
+4. Estimación del factor matemático de la anualidad.
+5. Determinación de la cuota mensual requerida para cubrir la diferencia.
+6. Retorno del valor a pagar o impresión del respectivo código de error.
+
+---
+
+## 🖥️ Resultados Esperados
+
+### ✅ Escenario de Éxito
+Si los parámetros cumplen todas las reglas, el sistema arroja la proyección financiera de manera limpia:
 
 ```text
-📈 CALCULADORA DE AHORRO PROGRAMADO
+📈 SIMULADOR DE AHORRO PROGRAMADO
 
-Ingrese la meta de ahorro: 1100000
-Ingrese el plazo en meses: 6
-Ingrese el monto extra (0 si no aplica): 0
+> Indique su meta de ahorro: 1100000
+> Indique el plazo (meses): 6
+> Ingrese un abono extraordinario (0 si no aplica): 0
 
-✅ RESULTADO
-Debes ahorrar mensualmente: $179,925.80
+✅ PROYECCIÓN CALCULADA
+Cuota mensual sugerida: $179,925.80
