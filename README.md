@@ -19,27 +19,25 @@ El motor de cálculo financiero del programa se rige por las siguientes premisas
 
 - 📌 **Tasa de rendimiento mensual:** Fijada en `0.75%` (0.0075) para las proyecciones.
 - 📌 **Proyección del capital extra:** Todo abono extraordinario genera rendimientos desde el mes en que se deposita (`k`) hasta el vencimiento del plan.
+## 📊 Bases Matemáticas y Fórmulas
 
-\[
-![Fórmula Valor Futuro](assets/images//fvextra.svg)
-\]
+El motor de cálculo financiero del programa se rige por las siguientes premisas:
 
-- 📌 **Crecimiento de las cuotas (Anualidad):** Calcula cómo el dinero aportado mes a mes va sumando valor con los intereses.
+- 📌 **Tasa de rendimiento mensual ($i$):** Fijada en `0.75%` (0.0075) para las proyecciones.
 
-\[
-![Fórmula Valor Futuro](assets/images//formula2.svg)
-\]
+- 📌 **Si existe un abono extra, se calcula su valor futuro:** Este aporte ($Extra$) genera rendimientos desde el mes en que se deposita ($k$) hasta el vencimiento del plan ($n$). La fórmula aplicada es:
 
-- 📌 **Cálculo de la cuota final:** Al total de la meta se le descuenta el valor futuro generado por el abono extra. La diferencia restante se divide por el factor de anualidad para hallar el pago mensual exacto.
+$$VF_{extra} = Extra \times (1 + i)^{(n - k)}$$
 
-\[
-![Fórmula Valor Futuro](assets/images//cuotamensual.svg)
-\]
+- 📌 **Valor Futuro de Anualidad Ordinaria:** Calcula cómo el dinero aportado mes a mes ($C$) va sumando valor con los intereses para alcanzar una Meta ($VF$). La fórmula general es:
+
+$$VF = C \times \frac{(1 + i)^n - 1}{i}$$
+
+- 📌 **Finalmente, se despeja la cuota mensual ($C$):** Al total de la meta original se le descuenta el valor futuro generado por el abono extra. Sobre ese nuevo total, se despeja $C$ para hallar el pago exacto:
+
+$$C = \frac{(Meta - VF_{extra}) \times i}{(1 + i)^n - 1}$$
 
 Todos los valores monetarios de salida se redondean a **2 decimales** para garantizar precisión contable.
-
----
-
 ## 📥 Parámetros de Entrada
 
 Para operar, la herramienta requiere que se definan cuatro variables clave (ya sea por consola o mediante la instanciación de la clase):
