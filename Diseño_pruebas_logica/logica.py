@@ -29,7 +29,7 @@ class ErrorAbonoExtraMenorAcero(Exception):
 class AhorroProgramado:
     def __init__(self, meta, plazo, extra=0, mes_extra=0):
         self.meta = meta
-        self.plazo = plazo
+        self.plazo = plazo 
         self.extra = extra
         self.mes_extra = mes_extra
 

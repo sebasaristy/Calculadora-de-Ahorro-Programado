@@ -11,7 +11,6 @@ class TestAhorroProgramado(unittest.TestCase):
 
    
     # CASOS NORMALES
-  
     
     def test_caso_normal_uno(self):
         """Ahorro estándar a 12 meses sin abonos"""
