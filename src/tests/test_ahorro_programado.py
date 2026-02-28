@@ -5,12 +5,16 @@ from pathlib import Path
 # Permite importar desde la carpeta raíz del proyecto
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from logica import AhorroProgramado
+from src.core.logica import AhorroProgramado
 
 class TestAhorroProgramado(unittest.TestCase):
 
     # CASOS NORMALES
+<<<<<<< HEAD:Diseño_pruebas_logica/test_pruebas.py
+    
+=======
 
+>>>>>>> 5703335bd0f4af6e8f40cf728a1263a6a8209266:src/tests/test_ahorro_programado.py
     def test_caso_normal_uno(self):
         """Ahorro estándar a 12 meses sin abonos"""
         ahorro = AhorroProgramado(meta=1200000, plazo=12, extra=0, mes_extra=0)
