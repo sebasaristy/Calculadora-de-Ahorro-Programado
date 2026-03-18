@@ -5,7 +5,7 @@ from pathlib import Path
 # Permite importar desde la raíz del proyecto
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.core.logica import (
+from core.logica import (
     AhorroProgramado,
     ErrorMetaMayorACero,
     ErrorPlazoMayorACero,
