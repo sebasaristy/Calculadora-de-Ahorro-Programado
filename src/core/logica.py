@@ -19,11 +19,11 @@ class ErrorMesExtraFueraDelRango(Exception):
     pass
 
 class AhorroProgramado:
-    def __init__(self, meta, plazo, abono_extra=0, mes_abono_extra=0):
+    def __init__(self, meta, plazo, extra = 0, mes_extra = 0):
         self.meta = meta
         self.plazo = plazo
-        self.abono_extra = abono_extra
-        self.mes_abono_extra = mes_abono_extra
+        self.abono_extra = extra
+        self.mes_abono_extra = mes_extra
         self.tasa_interes = 0.0075
 
     def calcular_ahorro(self):
