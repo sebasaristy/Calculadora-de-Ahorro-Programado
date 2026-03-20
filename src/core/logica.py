@@ -1,60 +1,58 @@
-class ErrorMetaMayorACero(Exception):
-    """La meta debe ser mayor que 0"""
-    pass
+class ErrorMetaInvalida(Exception):
+    def __init__(self, meta):
+        super().__init__(f"La meta ingresada ({meta}) debe ser mayor a 0.")
 
-class ErrorPlazoMayorACero(Exception):
-    """El plazo debe ser mayor que 0"""
-    pass
+class ErrorPlazoInvalido(Exception):
+    def __init__(self, plazo):
+        super().__init__(f"El plazo ingresado ({plazo}) debe ser mayor a 0 meses.")
 
-class ErrorAbonoExtraMenorACero(Exception):
-    """El abono extra no puede ser menor que 0"""
-    pass
+class ErrorAbonoInvalido(Exception):
+    def __init__(self, abono):
+        super().__init__(f"El abono extra ({abono}) no puede ser un valor negativo.")
 
 class ErrorAbonoSuperaMeta(Exception):
-    """El abono extra no puede superar la meta"""
-    pass
+    def __init__(self, abono, meta):
+        super().__init__(f"El abono extra ({abono}) supera la meta total ({meta}).")
 
-class ErrorMesExtraFueraDelRango(Exception):
-    """El mes del abono no puede superar el plazo"""
-    pass
+class ErrorMesExtraFueraDeRango(Exception):
+    def __init__(self, mes, plazo):
+        super().__init__(f"El mes del abono ({mes}) debe estar entre 1 y el plazo máximo ({plazo}).")
+
 
 class AhorroProgramado:
-    def __init__(self, meta, plazo, extra = 0, mes_extra = 0):
+
+    TASA_INTERES_MENSUAL = 0.0075
+
+    def __init__(self, meta: float, plazo: int, abono_extra: float = 0.0, mes_abono_extra: int = 0):
         self.meta = meta
         self.plazo = plazo
-        self.abono_extra = extra
-        self.mes_abono_extra = mes_extra
-        self.tasa_interes = 0.0075
+        self.abono_extra = abono_extra
+        self.mes_abono_extra = mes_abono_extra
 
-    def calcular_ahorro(self):
-        # Validaciones de integridad de datos
+    def _validar_datos(self) -> None:
+        """Función privada con Responsabilidad Única: Solo validar datos."""
         if self.meta <= 0:
-            raise ErrorMetaMayorACero()
-
+            raise ErrorMetaInvalida(self.meta)
         if self.plazo <= 0:
-            raise ErrorPlazoMayorACero()
-
+            raise ErrorPlazoInvalido(self.plazo)
         if self.abono_extra < 0:
-            raise ErrorAbonoExtraMenorACero()
-
+            raise ErrorAbonoInvalido(self.abono_extra)
         if self.abono_extra > self.meta:
-            raise ErrorAbonoSuperaMeta()
-
+            raise ErrorAbonoSuperaMeta(self.abono_extra, self.meta)
         if self.mes_abono_extra > self.plazo:
-            raise ErrorMesExtraFueraDelRango()
+            raise ErrorMesExtraFueraDeRango(self.mes_abono_extra, self.plazo)
 
-       
-        interes = self.tasa_interes
-        total_periodos = self.plazo
-        momento_abono_extra = self.mes_abono_extra
+    def calcular_cuota_mensual(self) -> float:
+        """Función con Responsabilidad Única: Solo aplicar matemáticas."""
+        self._validar_datos()
 
-        if momento_abono_extra > 0:
-            periodos_restantes = total_periodos - momento_abono_extra
-            valor_futuro_abono_extra = self.abono_extra * ((1 + interes) ** periodos_restantes)
+        if self.mes_abono_extra > 0:
+            periodos_restantes = self.plazo - self.mes_abono_extra
+            valor_futuro_abono = self.abono_extra * ((1 + self.TASA_INTERES_MENSUAL) ** periodos_restantes)
         else:
-            valor_futuro_abono_extra = 0
+            valor_futuro_abono = 0.0
 
-        factor_acumulacion = ((1 + interes) ** total_periodos - 1) / interes
-        cuota_mensual = (self.meta - valor_futuro_abono_extra) / factor_acumulacion
+        factor_acumulacion = ((1 + self.TASA_INTERES_MENSUAL) ** self.plazo - 1) / self.TASA_INTERES_MENSUAL
+        cuota = (self.meta - valor_futuro_abono) / factor_acumulacion
 
-        return round(cuota_mensual, 2)
+        return max(0.0, round(cuota, 2))

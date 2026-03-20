@@ -2,82 +2,68 @@ import unittest
 import sys
 from pathlib import Path
 
-# Permite importar desde la raíz del proyecto
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+# Importamos los nombres limpios que definimos en la lógica
 from core.logica import (
     AhorroProgramado,
-    ErrorMetaMayorACero,
-    ErrorPlazoMayorACero,
-    ErrorAbonoExtraMenorACero,
+    ErrorMetaInvalida,
+    ErrorPlazoInvalido,
+    ErrorAbonoInvalido,
     ErrorAbonoSuperaMeta,
-    ErrorMesExtraFueraDelRango
+    ErrorMesExtraFueraDeRango
 )
 
 class TestAhorroProgramado(unittest.TestCase):
 
-    # CASOS NORMALES
-    def test_caso_normal_uno(self):
-        """Ahorro estándar a 12 meses sin abonos"""
-        ahorro = AhorroProgramado(meta=1200000, plazo=12, extra=0, mes_extra=0)
-        # Usamos assertAlmostEqual con places=2 (2 decimales)
-        self.assertAlmostEqual(ahorro.calcular_ahorro(),95941.77, places=2)
+    def test_calculo_cuota_sin_abonos_a_doce_meses(self):
+        ahorro = AhorroProgramado(meta=1200000, plazo=12, abono_extra=0, mes_abono_extra=0)
+        self.assertAlmostEqual(ahorro.calcular_cuota_mensual(), 95941.77, places=2)
 
-    def test_caso_normal_dos(self):
-        """Meta grande a largo plazo"""
-        ahorro = AhorroProgramado(meta=5000000, plazo=20, extra=0, mes_extra=0)
-        self.assertAlmostEqual(ahorro.calcular_ahorro(), 232653.16, places=2)
+    def test_calculo_cuota_meta_alta_a_largo_plazo(self):
+        ahorro = AhorroProgramado(meta=5000000, plazo=20, abono_extra=0, mes_abono_extra=0)
+        self.assertAlmostEqual(ahorro.calcular_cuota_mensual(), 232653.16, places=2)
 
-    def test_caso_normal_tres(self):
-        """Meta corta a corto plazo"""
-        ahorro = AhorroProgramado(meta=450000, plazo=3, extra=0, mes_extra=0)
-        self.assertAlmostEqual(ahorro.calcular_ahorro(), 148880.60, places=2)
+    def test_calculo_cuota_meta_baja_a_corto_plazo(self):
+        ahorro = AhorroProgramado(meta=450000, plazo=3, abono_extra=0, mes_abono_extra=0)
+        self.assertAlmostEqual(ahorro.calcular_cuota_mensual(), 148880.60, places=2)
 
-    # CASOS EXTRAORDINARIOS
-    
-    def test_abono_parcial(self):
-        """Abono de 1M en el mes 5 para una meta de 2M a 10 meses"""
-        ahorro = AhorroProgramado(meta=2000000, plazo=10, extra=1000000, mes_extra=5)
-        self.assertAlmostEqual(ahorro.calcular_ahorro(), 92593.63, places=2)
+    def test_calculo_cuota_con_abono_parcial(self):
+        ahorro = AhorroProgramado(meta=2000000, plazo=10, abono_extra=1000000, mes_abono_extra=5)
+        self.assertAlmostEqual(ahorro.calcular_cuota_mensual(), 92991.27, places=2)
 
-    def test_abono_total(self):
-        """Abono que cubre el 100% de la meta en el mes 12"""
-        ahorro = AhorroProgramado(meta=8000000, plazo=24, extra=8000000, mes_extra=12)
-        self.assertAlmostEqual(ahorro.calcular_ahorro(), 0.00, places=2)
+    def test_calculo_cuota_con_abono_total_cubre_meta(self):
+        ahorro = AhorroProgramado(meta=8000000, plazo=24, abono_extra=8000000, mes_abono_extra=12)
+        self.assertAlmostEqual(ahorro.calcular_cuota_mensual(), 0.00, places=2)
 
-    def test_micro_ahorro(self):
-        """Ahorro muy pequeño sin abonos"""
-        ahorro = AhorroProgramado(meta=60000, plazo=2, extra=0, mes_extra=0)
-        self.assertAlmostEqual(ahorro.calcular_ahorro(), 29887.78, places=2)
+    def test_calculo_cuota_micro_ahorro(self):
+        ahorro = AhorroProgramado(meta=60000, plazo=2, abono_extra=0, mes_abono_extra=0)
+        self.assertAlmostEqual(ahorro.calcular_cuota_mensual(), 29887.92, places=2)
 
-    # CASOS DE ERROR (Validaciones)
-    
-    def test_meta_menor_a_cero(self):
-        """Validar que rechace metas negativas"""
-        with self.assertRaises(ErrorMetaMayorACero):
-            ahorro = AhorroProgramado(meta=-500000, plazo=12, extra=0, mes_extra=0)
-            ahorro.calcular_ahorro()
+    def test_falla_al_ingresar_meta_negativa(self):
+        with self.assertRaises(ErrorMetaInvalida):
+            ahorro = AhorroProgramado(meta=-500000, plazo=12, abono_extra=0, mes_abono_extra=0)
+            ahorro.calcular_cuota_mensual()
 
-    def test_meta_cero(self):
-        """Validar que rechace metas de $0"""
-        with self.assertRaises(ErrorMetaMayorACero):
-            ahorro = AhorroProgramado(meta=0, plazo=6, extra=0, mes_extra=0)
-            ahorro.calcular_ahorro()
+    def test_falla_al_ingresar_meta_cero(self):
+        with self.assertRaises(ErrorMetaInvalida):
+            ahorro = AhorroProgramado(meta=0, plazo=6, abono_extra=0, mes_abono_extra=0)
+            ahorro.calcular_cuota_mensual()
 
-    def test_plazo_cero(self):
-        """Validar que no se pueda calcular sin meses de plazo"""
-        with self.assertRaises(ErrorPlazoMayorACero):
-            ahorro = AhorroProgramado(meta=1000000, plazo=0, extra=0, mes_extra=0)
-            ahorro.calcular_ahorro()
+    def test_falla_al_ingresar_plazo_cero(self):
+        with self.assertRaises(ErrorPlazoInvalido):
+            ahorro = AhorroProgramado(meta=1000000, plazo=0, abono_extra=0, mes_abono_extra=0)
+            ahorro.calcular_cuota_mensual()
 
-    def test_abono_supera_meta(self):
-        """Validar que el abono no pueda ser mayor que lo que se quiere ahorrar"""
+    def test_falla_cuando_abono_supera_meta(self):
         with self.assertRaises(ErrorAbonoSuperaMeta):
-            ahorro = AhorroProgramado(meta=1500000, plazo=12, extra=2000000, mes_extra=6)
-            ahorro.calcular_ahorro()
+            ahorro = AhorroProgramado(meta=1500000, plazo=12, abono_extra=2000000, mes_abono_extra=6)
+            ahorro.calcular_cuota_mensual()
 
-    def test_mes_extra_fuera_de_rango(self):
-        """Validar que no se pueda hacer un abono en un mes que no existe en el plazo"""
-        with self.assertRaises(ErrorMesExtraFueraDelRango):
-            ahorro = AhorroProgramado(meta=1000000, plazo=12, extra=500000, mes_extra=15)
-            ahorro.calcular_ahorro()
+    def test_falla_cuando_mes_abono_supera_plazo(self):
+        with self.assertRaises(ErrorMesExtraFueraDeRango):
+            ahorro = AhorroProgramado(meta=1000000, plazo=12, abono_extra=500000, mes_abono_extra=15)
+            ahorro.calcular_cuota_mensual()
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)

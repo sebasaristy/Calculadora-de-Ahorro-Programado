@@ -1,66 +1,63 @@
 import sys
 from pathlib import Path
 
+# Ajuste de ruta para que encuentre la carpeta core
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.core.logica import (
     AhorroProgramado,
-    ErrorMetaMayorACero,
-    ErrorPlazoMayorACero,
-    ErrorAbonoExtraMenorACero,
+    ErrorMetaInvalida,
+    ErrorPlazoInvalido,
+    ErrorAbonoInvalido,
     ErrorAbonoSuperaMeta,
-    ErrorMesExtraFueraDelRango
+    ErrorMesExtraFueraDeRango
 )
 
 
-def pedir_entero(mensaje):
+def solicitar_entero(mensaje: str) -> int:
+    """Función de una sola tarea: Pedir y validar un número."""
     while True:
         try:
             return int(input(mensaje))
         except ValueError:
-            print("❌ Debes ingresar un número entero.")
+            print("❌ Error: Debes ingresar un número entero válido.")
 
 
-def main():
+def mostrar_encabezado() -> None:
+    """Función de una sola tarea: Imprimir la interfaz visual."""
     print("===================================")
     print("   CALCULADORA DE AHORRO PROGRAMADO ")
     print("===================================\n")
 
+
+def main() -> None:
+    mostrar_encabezado()
+
     try:
-        meta = pedir_entero("Ingrese la meta de ahorro ($): ")
-        plazo = pedir_entero("Ingrese el plazo en meses: ")
-        extra = pedir_entero("Ingrese el abono extra (0 si no hay): ")
-        mes_extra = pedir_entero("Ingrese el mes del abono extra (0 si no hay): ")
+        meta = solicitar_entero("Ingrese la meta de ahorro ($): ")
+        plazo = solicitar_entero("Ingrese el plazo en meses: ")
+        abono_extra = solicitar_entero("Ingrese el abono extra (0 si no hay): ")
+        mes_abono_extra = solicitar_entero("Ingrese el mes del abono extra (0 si no hay): ")
 
         ahorro = AhorroProgramado(
             meta=meta,
             plazo=plazo,
-            extra=extra,
-            mes_extra=mes_extra
+            abono_extra=abono_extra,
+            mes_abono_extra=mes_abono_extra
         )
 
-        cuota = ahorro.calcular_ahorro()
+        cuota_mensual = ahorro.calcular_cuota_mensual()
 
         print("\n✅ Cálculo exitoso")
-        print(f"Debes ahorrar mensualmente: ${cuota:,.2f}")
+        print(f"Debes ahorrar mensualmente: ${cuota_mensual:,.2f}")
 
-    except ErrorMetaMayorACero:
-        print("❌ Error: la meta debe ser mayor que 0.")
 
-    except ErrorPlazoMayorACero:
-        print("❌ Error: el plazo debe ser mayor que 0.")
+    except (ErrorMetaInvalida, ErrorPlazoInvalido, ErrorAbonoInvalido, 
+            ErrorAbonoSuperaMeta, ErrorMesExtraFueraDeRango) as error_validacion:
+        print(f"\n❌ {error_validacion}")
 
-    except ErrorAbonoExtraMenorACero:
-        print("❌ Error: el abono extra no puede ser negativo.")
-
-    except ErrorAbonoSuperaMeta:
-        print("❌ Error: el abono extra no puede superar la meta.")
-
-    except ErrorMesExtraFueraDelRango:
-        print("❌ Error: el mes del abono está fuera del plazo.")
-
-    except Exception as e:
-        print("❌ Error inesperado:", e)
+    except Exception as error_inesperado:
+        print(f"\n❌ Error crítico inesperado: {error_inesperado}")
 
 
 if __name__ == "__main__":
