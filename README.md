@@ -137,7 +137,7 @@ Debes ahorrar mensualmente: $179,925.80
 Para ejecutar el entorno de pruebas automatizadas y verificar la salud del código, utiliza:
 
 ```bash
-python -m unittest tests/test_ahorro_programado.py -v
+python -m unittest discover -s src/tests -v
 ```
 
 Salida esperada:
