@@ -17,6 +17,7 @@ from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 
 
 class CalculadoraAhorroGUI(App):
@@ -68,10 +69,21 @@ class CalculadoraAhorroGUI(App):
             resultado = ahorro.calcular_cuota_mensual()
 
             self.resultado_label.text = f"{resultado}"
-        except ValueError:
-            self.resultado_label.text = "Error: Por favor, ingrese valores numéricos válidos."
         except (ErrorMetaInvalida, ErrorPlazoInvalido, ErrorAbonoInvalido, ErrorAbonoSuperaMeta, ErrorMesExtraFueraDeRango) as e:
             self.resultado_label.text = f"Error: {str(e)}"
+
+    def validar(self):
+        if (not(self.meta_input.text.isnumeric())):
+            raise Exception("La meta de ahorro debe ser un numero.")
+        
+        if (not(self.plazo_input.text.isnumeric())):
+            raise Exception("El plazo debe ser un numero.")
+        
+        if (not(self.abono_input.text.isnumeric())):
+            raise Exception("El abono extra debe ser un numero.")
+        
+        if (not(self.mes_abono_input.text.isnumeric())):
+            raise Exception("El mes de abono extra debe ser un numero.")
 
 if __name__ == "__main__":
     CalculadoraAhorroGUI().run()
