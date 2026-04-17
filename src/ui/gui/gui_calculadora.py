@@ -24,6 +24,8 @@ class CalculadoraAhorroGUI(App):
         layout = GridLayout(cols=2, spacing = 10, padding = 10)
 
         self.layout = layout
+        self.title = "Calculadora de Ahorro Programado"
+        
         self.layout.add_widget(Label(text="Meta de ahorro:"))
         self.meta_input = TextInput(hint_text="Meta de ahorro")
         self.layout.add_widget(self.meta_input)
@@ -40,13 +42,19 @@ class CalculadoraAhorroGUI(App):
         self.mes_abono_input = TextInput(hint_text="Mes de abono extra (0 si no hay)")
         self.layout.add_widget(self.mes_abono_input)
 
+        self.resultado1_label = Label(text="Ahorro mensual necesario:")
+        self.layout.add_widget(self.resultado1_label)
+
+        self.resultado_label = Label(text="")
+        self.layout.add_widget(self.resultado_label)
+
         boton = Button(text="Calcular Ahorro")
         boton.bind(on_press=self.calcular_ahorro)
         self.layout.add_widget(boton)
 
-        self.resultado_label = Label(text="")
-        self.layout.add_widget(self.resultado_label)
-        
+        self.informacion_label = Label(text="Esta aplicacion permite que el usuario calcule\n el ahorro mensual necesario para alcanzar la meta\n de ahorro deseada en el plazo establecido, teniendo\n en cuenta un abono extra opcional")
+        self.layout.add_widget(self.informacion_label)
+
         return layout
     
     def calcular_ahorro(self, sender):
@@ -59,7 +67,7 @@ class CalculadoraAhorroGUI(App):
             ahorro = AhorroProgramado(meta=meta, plazo=plazo, abono_extra=abono_extra, mes_abono_extra=mes_abono)
             resultado = ahorro.calcular_cuota_mensual()
 
-            self.resultado_label.text = f"Resultado: {resultado}"
+            self.resultado_label.text = f"{resultado}"
         except ValueError:
             self.resultado_label.text = "Error: Por favor, ingrese valores numéricos válidos."
         except (ErrorMetaInvalida, ErrorPlazoInvalido, ErrorAbonoInvalido, ErrorAbonoSuperaMeta, ErrorMesExtraFueraDeRango) as e:
