@@ -69,8 +69,19 @@ class CalculadoraAhorroGUI(App):
             resultado = ahorro.calcular_cuota_mensual()
 
             self.resultado_label.text = f"{resultado}"
-        except (ErrorMetaInvalida, ErrorPlazoInvalido, ErrorAbonoInvalido, ErrorAbonoSuperaMeta, ErrorMesExtraFueraDeRango) as e:
-            self.resultado_label.text = f"Error: {str(e)}"
+        
+        except ValueError:
+            self.resultado_label.color = (1, 0.3, 0.3, 1)
+            self.resultado_label.text = "❌ Todos los campos deben ser números enteros."
+
+        except (ErrorMetaInvalida, ErrorPlazoInvalido, ErrorAbonoInvalido,
+                ErrorAbonoSuperaMeta, ErrorMesExtraFueraDeRango) as error_validacion:
+            self.resultado_label.color = (1, 0.3, 0.3, 1)
+            self.resultado_label.text = f"❌ {error_validacion}"
+
+        except Exception as error_inesperado:
+            self.resultado_label.color = (1, 0.3, 0.3, 1)
+            self.resultado_label.text = f"❌ Error crítico: {error_inesperado}"
 
     def validar(self):
         if (not(self.meta_input.text.isnumeric())):
