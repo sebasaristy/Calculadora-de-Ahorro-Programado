@@ -171,6 +171,7 @@ OK
 Proyecto académico desarrollado como práctica de modelado financiero aplicado al ahorro programado y buenas prácticas de programación en Python.
 
 
+-------------
 ## Ejecución
 
 ### Prerrequisitos
@@ -202,4 +203,5 @@ python src/ui/console.py
 El programa te pedirá los mismos datos de forma interactiva: meta de ahorro, plazo en meses, abono extra y el mes del abono extra. Al finalizar, mostrará el ahorro mensual necesario.
 
 > En ambos casos, es importante ejecutar los comandos desde la raíz del proyecto (`Calculadora-de-Ahorro-Programado/`) para que las importaciones funcionen correctamente.
-> REALIZADO POR: SEBASTIAN ARISTIZABAL ARISTIZABAL E ISABELLA QUINTERO GUTIERREZ
+
+REALIZADO POR: SEBASTIAN ARISTIZABAL ARISTIZABAL E ISABELLA QUINTERO GUTIERREZ
