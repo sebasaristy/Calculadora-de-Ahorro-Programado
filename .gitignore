@@ -3,3 +3,5 @@ dist/
 __pycache__/
 *.pyc
 **__pycache__
+build_log
+buildozer
